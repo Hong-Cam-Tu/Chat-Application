@@ -2,7 +2,6 @@ package chatApplication.files;
 public class Video extends File {    
     private String _resolution;
     private int _durationInSeconds;
-    private double _capacity;
     
     public Video(double _capacity, String _resolution, int _durationInSeconds) {
         super(_capacity);

@@ -1,15 +1,19 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
 package chatApplication.usecases.adapters;
 
-import chatapplication.domains.BaseEntity;
+
 import java.util.function.Predicate;
 
-public interface Repository<T extends BaseEntity> {
-   T getById(String var1);
+import chatApplication.domains.BaseEntity;
 
-   boolean add(T var1);
+public interface Repository<T extends BaseEntity> {
+   T getById(String id);
+
+   boolean add(T addingEntity);
 
    void deleteAll();
 
-   T getFirst(Predicate<T> var1);
+   T getFirst(Predicate<T> predicate);
+
+   T getUsersByName(String name);
 }

@@ -35,4 +35,16 @@ public class PrivateGroup extends Group {
 
    public PrivateGroup() {
    }
+
+
+   @Override
+   public List<User> getUsersByName(String name) {
+      List<User> getEqualsUsersName = new ArrayList<>();
+         for(User user : getUsers()) {
+            if(user.getFullName().contains(name)) {
+               getEqualsUsersName.add(user);
+            }
+         }
+         return getEqualsUsersName;
+   }
 }

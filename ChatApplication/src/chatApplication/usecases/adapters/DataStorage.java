@@ -3,6 +3,7 @@ package chatApplication.usecases.adapters;
 
 import chatApplication.domains.User;
 
+import chatApplication.domains.User;
 public interface DataStorage {
    Repository<User> getUsers();
 

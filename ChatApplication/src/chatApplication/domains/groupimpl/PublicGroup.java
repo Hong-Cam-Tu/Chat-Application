@@ -14,4 +14,15 @@ public class PublicGroup extends Group {
 
    public PublicGroup() {
    }
+
+   @Override
+   public List<User> getUsersByName(String name) {
+         List<User> getUsers = new ArrayList<>();
+         for(User user : users) {
+            if(user.getFullName().contains(name)) {
+               getUsers.add(user);
+            }
+         }
+         return getUsers;
+   }
 }

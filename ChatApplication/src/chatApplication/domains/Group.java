@@ -32,4 +32,5 @@ public abstract class Group {
         _audios.add(audios);
     }
     
+    public abstract List<User> getUsersByName(String name);
 }

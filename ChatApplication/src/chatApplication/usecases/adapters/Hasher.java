@@ -2,5 +2,5 @@
 package chatApplication.usecases.adapters;
 
 public interface Hasher {
-   String hash(String var1);
+   String hash(String string);
 }

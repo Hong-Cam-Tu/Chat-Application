@@ -2,8 +2,5 @@
 package chatApplication.usecases;
 
 public abstract class UseCase<Input, Output> {
-   public UseCase() {
-   }
-
-   public abstract Output excute(Input var1);
+   public abstract Output excute(Input input);
 }

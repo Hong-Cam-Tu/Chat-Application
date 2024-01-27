@@ -11,7 +11,7 @@ import chatApplication.domains.BaseEntity;
 import chatApplication.usecases.adapters.Repository;
 
 public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
-   private List<T> enities = new ArrayList();
+   private List<T> enities = new ArrayList<>();
    public static int idCounter = 1;
 
    public InMemoryRepository() {
@@ -21,7 +21,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
       Optional<T> entity = this.enities.stream().filter((e) -> {
          return e.getId().equals(id);
       }).findFirst();
-      return (BaseEntity)entity.get();
+      return entity.get();
    }
 
    public boolean add(T entity) {
@@ -39,6 +39,6 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
    public T getFirst(Predicate<T> predicate) {
       Optional<T> entity = this.enities.stream().filter(predicate).findFirst();
-      return entity.isPresent() ? (BaseEntity)entity.get() : null;
+      return entity.isPresent() ? entity.get() : null;
    }
 }

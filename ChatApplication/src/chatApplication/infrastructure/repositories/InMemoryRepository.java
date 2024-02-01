@@ -41,4 +41,10 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
       Optional<T> entity = this.enities.stream().filter(predicate).findFirst();
       return entity.isPresent() ? entity.get() : null;
    }
+
+   @Override
+   public T getUsersByName(String name) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'getUsersByName'");
+   }
 }

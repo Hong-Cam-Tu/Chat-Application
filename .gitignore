@@ -1,3 +1,8 @@
 ChatApplication/.settings/
 *.class
 ChatApplication/targets/
+ChatApplication/.project
+ChatApplication/src/targets
+ChatApplication/src/classes/META-INF/MANIFEST.MF
+ChatApplication/src/classes/META-INF/maven/ChatApplication/ChatApplication/pom.properties
+ChatApplication/src/classes/META-INF/maven/ChatApplication/ChatApplication/pom.xml

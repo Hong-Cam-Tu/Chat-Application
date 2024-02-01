@@ -11,8 +11,10 @@ import chatApplication.domains.User;
 
 public class PublicGroup extends Group {
    List<User> users = new ArrayList();
+   private String joinCode;
 
-   public PublicGroup() {
+   public PublicGroup(String name) {
+      super(name);
    }
 
    @Override
@@ -24,5 +26,10 @@ public class PublicGroup extends Group {
             }
          }
          return getUsers;
+   }
+
+   @Override
+   public Group createGroup(String name) {
+      
    }
 }

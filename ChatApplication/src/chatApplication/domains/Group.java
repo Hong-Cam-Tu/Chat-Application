@@ -12,6 +12,19 @@ public abstract class Group {
     private List<Video> _videos = new ArrayList<>();
     private List<Audio> _audios = new ArrayList<>();
     private List<Image> _images = new ArrayList<>();
+    private String _nameGroup;
+
+    public String getNameGroup() {
+        return _nameGroup;
+    }
+
+    public void setNameGroup(String nameGroup) {
+        this._nameGroup = nameGroup;
+    }
+
+    public Group(String nameGroup) {
+        _nameGroup = nameGroup;
+    }
 
     public List<Image> getImage() {
         return _images;

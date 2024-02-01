@@ -9,6 +9,12 @@ import chatApplication.domains.Group;
 import chatApplication.domains.User;
 
 public class PrivateGroup extends Group {
+   public PrivateGroup(String nameGroup) {
+      super(nameGroup);
+      //TODO Auto-generated constructor stub
+   }
+
+
    private List<User> _users = new ArrayList<>();
    private List<User> _admins = new ArrayList<>();
    
@@ -33,10 +39,6 @@ public class PrivateGroup extends Group {
    }
 
 
-   public PrivateGroup() {
-   }
-
-
    @Override
    public List<User> getUsersByName(String name) {
       List<User> getEqualsUsersName = new ArrayList<>();
@@ -46,5 +48,11 @@ public class PrivateGroup extends Group {
             }
          }
          return getEqualsUsersName;
+   }
+
+
+   
+   public void creator(User user) {
+       _admins.add(user);
    }
 }

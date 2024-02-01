@@ -19,6 +19,7 @@ public class User extends BaseEntity {
       MALE, FEMALE, OTHER
   }
    public User(String hashedPassword, String username) {
+      super();
       this._hashedPassword = hashedPassword;
       this._username = username;
    }

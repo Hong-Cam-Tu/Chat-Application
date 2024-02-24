@@ -9,7 +9,7 @@ import chatApplication.domains.Group;
 import chatApplication.domains.User;
 
 public class PrivateGroup extends Group {
-
+   
    private List<User> _members = new ArrayList<>();
    private List<User> _admins = new ArrayList<>();
 
@@ -46,6 +46,15 @@ public class PrivateGroup extends Group {
          return getEqualsUsersName;
    }
 
+   public boolean isAdmin(String id) {
+      for(User admin : getAdmins()) {
+         if(admin.getID().equals(id)) {
+            return true;
+         }
+      }
+      return false;
+   }
+
    public void creator(User user) {
        _admins.add(user);
    }
@@ -64,5 +73,29 @@ public class PrivateGroup extends Group {
          }
       }
       return false;
+   }
+
+   @Override
+   public void inviteMember(String idAmin, String idMember) {
+      if(isAdmin(idAmin)) {
+         this.addMember(findMemberById(idMember));
+      }
+   }
+
+   @Override
+   public void removeMember(String idAdmin, String idMember) {
+      if(isAdmin(idAdmin)) {
+         _members.remove(findMemberById(idMember));
+      }
+   }
+
+   @Override
+   public User findMemberById(String idMember) {
+      for(User member : _members) {
+         if(idMember.equals(member.getId())) {
+            return member;
+         }
+      }
+      return null;
    }
 }

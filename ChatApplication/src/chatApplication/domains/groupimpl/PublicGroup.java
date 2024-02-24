@@ -7,20 +7,17 @@ import java.util.List;
 
 import chatApplication.domains.Group;
 import chatApplication.domains.User;
-import chatApplication.files.Audio;
-import chatApplication.files.Image;
-import chatApplication.files.Video;
-import chatApplication.usecases.user.LoginUseCase.LoginResult;
 
 public class PublicGroup extends Group {
-   private List<User> _users = new ArrayList();
-   private List<Video> _videos = new ArrayList<>();
-   private List<Audio> _audios = new ArrayList<>();
-   private List<Image> _images = new ArrayList<>();
+   private List<User> _members = new ArrayList();
    private String _joinCode;
 
    public String getJoinCode() {
       return _joinCode;
+   }
+
+   public List<User> getAllMembers() {
+      return _members;
    }
 
    public void setJoinCode(String joinCode) {
@@ -34,7 +31,7 @@ public class PublicGroup extends Group {
    @Override
    public List<User> getUsersByName(String name) {
          List<User> getUsers = new ArrayList<>();
-         for(User user : _users) {
+         for(User user : _members) {
             if(user.getFullName().contains(name)) {
                getUsers.add(user);
             }
@@ -42,12 +39,16 @@ public class PublicGroup extends Group {
          return getUsers;
    }
 
-   public OutputValues addUser(User user,String joincode) {
-      if(this.getJoinCode().equals(joincode)) {
-         _users.add(user);
+   public OutputValues addMemberbyJoinCode(User member,String joinCode) {
+      if(this.getJoinCode().equals(joinCode)) {
+         addMember(member);
          return new OutputValues(Status.Successed, "");
       }
          return new OutputValues(Status.Failed, "");
+   }
+
+   public void addMember(User member) {
+      _members.add(member);
    }
 
    public enum Status {
@@ -63,4 +64,38 @@ public class PublicGroup extends Group {
             _message = message;
          }
     }
+
+   @Override
+   public boolean isWithinGroup(String id) {
+      for(User member : getAllMembers()) {
+         if(member.getID().equals(id)) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   @Override
+   public void inviteMember(String idAdmin, String idMember) {
+      if(isWithinGroup(idAdmin)) {
+         this.addMember(findMemberById(idMember));
+      }
+   }
+
+   @Override
+   public void removeMember(String idAdmin, String idMember) {
+      if(isWithinGroup(idAdmin)) {
+         _members.remove(findMemberById(idMember));
+      }
+   }
+
+   @Override
+   public User findMemberById(String idMember) {
+      for(User member : _members) {
+         if(idMember.equals(member.getId())) {
+            return member;
+         }
+      }
+      return null;
+   }
 }

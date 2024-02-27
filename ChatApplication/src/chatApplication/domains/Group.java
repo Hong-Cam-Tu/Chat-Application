@@ -6,10 +6,12 @@ import java.util.List;
 
 import chatApplication.domains.groupimpl.PrivateGroup;
 import chatApplication.domains.groupimpl.PublicGroup;
+import chatApplication.usecases.adapters.Conversation;
+
 
 public abstract class Group {
-    private final String _idConversation;
-    private final String _idFile;
+    private String _idConversation;
+    private String _idFile;
     private String _nameGroup;
     private List<PublicGroup> _publicGroups = new ArrayList<>();
     private List<PrivateGroup> _privateGroups = new ArrayList<>();
@@ -22,6 +24,9 @@ public abstract class Group {
         return _idConversation;
     }
 
+    public void setIdConversation(String _idConversation) {
+        this._idConversation = _idConversation;
+    }
 
     public void setPublicGroups(PublicGroup publicGroup) {
         this._publicGroups.add(publicGroup);
@@ -43,14 +48,16 @@ public abstract class Group {
         return _idFile;
     }
 
+    public void setIdFile(String idFile) {
+        this._idFile = idFile;
+    }
+
     public void setNameGroup(String nameGroup) {
         this._nameGroup = nameGroup;
     }
 
-    public Group(String nameGroup,String idConversation,String idFile) {
+    public Group(String nameGroup) {
         _nameGroup = nameGroup;
-        _idConversation = idConversation;
-        _idFile = idFile;
     }
     
     public List<String> getAllGroupByIdUser(String id) {

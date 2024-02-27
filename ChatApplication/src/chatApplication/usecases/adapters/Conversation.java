@@ -1,5 +1,8 @@
 package chatApplication.usecases.adapters;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import chatApplication.domains.Group;
@@ -48,5 +51,17 @@ public class Conversation {
     
     public void deleteMessage(String idMessage) {
         _messages.remove(findMessageById(idMessage));
+    }
+
+    public List<Message> getKLatestMessage(int k , int m) {
+        List<Message> messages = new ArrayList<>();
+        for(int i=_messages.size()-k-m;i<_messages.size()-m;i++) {
+            messages.add(_messages.get(i));
+        }
+        return messages;
+    }
+    
+    public void sdsd9D() {
+        _messages.sort((s1,s2)->s1.getTimestamp().after(s2.getTimestamp()));
     }
 }

@@ -72,6 +72,8 @@ public class Message {
         _attachments.add(attachment);
     }
     
-    
+    public String editMessage() {
+        return _contents.get(_contents.size()-1);
+    }
     
 }

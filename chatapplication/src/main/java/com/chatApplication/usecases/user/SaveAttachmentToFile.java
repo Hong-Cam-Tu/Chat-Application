@@ -1,4 +1,4 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
 import com.chatApplication.domains.FileBase;
 import com.chatApplication.infrastructure.data.InMemoryFileStorage;

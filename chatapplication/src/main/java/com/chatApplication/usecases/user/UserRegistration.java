@@ -1,10 +1,10 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.domains.User.UserBuilder;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.DataStorage;
-import com.chatApplication.usecases.adapters.Hasher;
+import com.chatapplication.domains.User;
+import com.chatapplication.domains.User.UserBuilder;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.DataStorage;
+import com.chatapplication.usecases.adapters.Hasher;
 
 public class UserRegistration
         extends UseCase<UserRegistration.InputValues, UserRegistration.OutputValues> {

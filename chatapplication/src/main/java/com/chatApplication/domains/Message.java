@@ -1,4 +1,4 @@
-package com.chatApplication.domains;
+package com.chatapplication.domains;
 
 import java.util.LinkedList;
 import java.util.Date;

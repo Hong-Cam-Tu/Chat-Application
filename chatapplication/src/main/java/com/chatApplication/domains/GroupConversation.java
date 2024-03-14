@@ -1,4 +1,4 @@
-package com.chatApplication.domains;
+package com.chatapplication.domains;
 
 import java.util.ArrayList;
 import java.util.List;

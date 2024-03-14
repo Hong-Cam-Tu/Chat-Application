@@ -1,4 +1,4 @@
-package com.chatApplication.usecases.adapters;
+package com.chatapplication.usecases.adapters;
 
 import com.chatApplication.domains.groupimpl.PublicGroup;
 

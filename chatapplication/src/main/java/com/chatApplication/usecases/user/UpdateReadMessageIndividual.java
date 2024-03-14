@@ -1,9 +1,9 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
 public class UpdateReadMessageIndividual 
         extends UseCase<UpdateReadMessageIndividual.InputValues,UpdateReadMessageIndividual.OutputValues> {

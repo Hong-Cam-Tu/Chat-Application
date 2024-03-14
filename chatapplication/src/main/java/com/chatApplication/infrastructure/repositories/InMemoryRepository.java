@@ -1,4 +1,4 @@
-package com.chatApplication.infrastructure.repositories;
+package com.chatapplication.infrastructure.repositories;
 
 import java.util.ArrayList;
 import java.util.List;

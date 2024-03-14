@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.domains;
+package com.chatapplication.domains;
 
 public abstract class FileBase extends BaseEntity{
     private double _capacity;

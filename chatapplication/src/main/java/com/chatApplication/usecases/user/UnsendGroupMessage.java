@@ -1,4 +1,4 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
 import com.chatApplication.domains.GroupConversation;
 import com.chatApplication.domains.messageimpl.GroupMessage;

@@ -1,4 +1,4 @@
-package com.chatApplication.infracstructure.services;
+package com.chatapplication.infracstructure.services;
 
 import java.io.IOException;
 import java.io.File;

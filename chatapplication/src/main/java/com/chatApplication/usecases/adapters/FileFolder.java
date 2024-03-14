@@ -1,4 +1,4 @@
-package com.chatApplication.usecases.adapters;
+package com.chatapplication.usecases.adapters;
 
 public interface FileFolder {
     byte[] getAttachment(String idFile);

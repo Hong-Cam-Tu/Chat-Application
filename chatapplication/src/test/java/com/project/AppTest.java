@@ -1,8 +1,5 @@
 package com.project;
 
-import static org.junit.Assert.assertTrue;
-import org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import com.chatApplication.infracstructure.services.MD5Hasher;
@@ -35,6 +32,5 @@ public class AppTest
     void testRegister() {
         userRegistration= new UserRegistration(dataStorage, hasher);
        OutputValues output = userRegistration.excute(new InputValues("tuan","tuan"));
-        
     }
 }

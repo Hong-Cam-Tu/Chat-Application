@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.chatApplication;
+package com.chatapplication.chatapplication;
 
 public class App {
    public App() {

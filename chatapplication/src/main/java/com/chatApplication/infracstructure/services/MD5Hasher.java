@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.infracstructure.services;
+package com.chatapplication.infracstructure.services;
 
 
 import java.math.BigInteger;

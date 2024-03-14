@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.domains.groupimpl;
+package com.chatapplication.domains.groupimpl;
 
 
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.messageimpl.GroupMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
 public class UpdateReadMessageGroup 
         extends UseCase<UpdateReadMessageGroup.InputValues,UpdateReadMessageGroup.OutputValues> {

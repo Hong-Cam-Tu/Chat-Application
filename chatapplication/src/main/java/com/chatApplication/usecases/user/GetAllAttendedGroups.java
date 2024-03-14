@@ -1,4 +1,4 @@
-package com.chatApplication.usecases.user;
+package com.chatapplication.usecases.user;
 
 import java.util.Collection;
 import java.util.List;

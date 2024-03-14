@@ -1,4 +1,4 @@
-package com.chatApplication.domains.files;
+package com.chatapplication.domains.files;
 
 import com.chatApplication.domains.FileBase;
 

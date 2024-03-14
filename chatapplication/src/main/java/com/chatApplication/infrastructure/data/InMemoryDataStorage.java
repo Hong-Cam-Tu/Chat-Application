@@ -1,4 +1,4 @@
-package com.chatApplication.infrastructure.data;
+package com.chatapplication.infrastructure.data;
 
 import com.chatApplication.domains.User;
 import com.chatApplication.infrastructure.repositories.InMemoryRepository;

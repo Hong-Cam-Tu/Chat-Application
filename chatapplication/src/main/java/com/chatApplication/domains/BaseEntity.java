@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.domains;
+package com.chatapplication.domains;
 
 import java.util.UUID;
 

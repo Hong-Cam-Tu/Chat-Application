@@ -1,5 +1,5 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
-package com.chatApplication.usecases.adapters;
+package com.chatapplication.usecases.adapters;
 
 
 import java.util.function.Predicate;

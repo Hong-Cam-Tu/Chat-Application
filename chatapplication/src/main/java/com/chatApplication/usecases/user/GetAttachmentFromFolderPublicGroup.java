@@ -3,12 +3,14 @@ package com.chatapplication.usecases.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chatApplication.domains.Group;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.FileFolder;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.Group;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.FileFolder;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
-public class GetAttachmentFromFolderPublicGroup extends UseCase<GetAttachmentFromFolderPublicGroup.InputValues,GetAttachmentFromFolderPublicGroup.OutputValues> {
+public class GetAttachmentFromFolderPublicGroup 
+extends UseCase<GetAttachmentFromFolderPublicGroup.InputGetAttachmentFromFolderPublicGroup,
+GetAttachmentFromFolderPublicGroup.OutputGetAttachmentFromFolderPublicGroup> {
     private PublicGroupStorage _publicGroupStorage;
     private FileFolder _fileFolder;
 
@@ -17,31 +19,31 @@ public class GetAttachmentFromFolderPublicGroup extends UseCase<GetAttachmentFro
         _fileFolder = fileFolder;
     }
 
-    public class InputValues {
+    public class InputGetAttachmentFromFolderPublicGroup {
         private String _idGroup;
 
-        InputValues(String idFile) {
+        InputGetAttachmentFromFolderPublicGroup(String idFile) {
             _idGroup =idFile;
         }
     }
 
-    public enum Result {
+    public enum GetAttachmentFromFolderPublicGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputGetAttachmentFromFolderPublicGroup {
+        private final GetAttachmentFromFolderPublicGroupResult _result;
         private final String _message;
         private final List<byte[]> _files;
 
-        OutputValues(Result result, String message,List<byte[]> files) {
+        OutputGetAttachmentFromFolderPublicGroup(GetAttachmentFromFolderPublicGroupResult result, String message,List<byte[]> files) {
             _result = result;
             _message = message;
             _files = files;
         }
 
-        public Result getResult() {
+        public GetAttachmentFromFolderPublicGroupResult getResult() {
             return _result;
         }
 
@@ -55,17 +57,17 @@ public class GetAttachmentFromFolderPublicGroup extends UseCase<GetAttachmentFro
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetAttachmentFromFolderPublicGroup excute(InputGetAttachmentFromFolderPublicGroup input) {
         Group publicGroup = _publicGroupStorage.getPublicGroup().getFirst(g->g.getID().equals(input._idGroup));
         if(publicGroup == null) {
-            return new OutputValues(Result.Failed, "Wrong id",null);
+            return new OutputGetAttachmentFromFolderPublicGroup(GetAttachmentFromFolderPublicGroupResult.Failed, "Wrong id",null);
         } else {
             List<String> idFiles = publicGroup.getIdFiles();
             List<byte[]> files = new ArrayList<>();
             for(String idFile:idFiles) {
                 files.add(_fileFolder.getAttachment(idFile));
             }
-            return new OutputValues(Result.Successed, "Successed",files);
+            return new OutputGetAttachmentFromFolderPublicGroup(GetAttachmentFromFolderPublicGroupResult.Successed, "Successed",files);
         }
     }
 }

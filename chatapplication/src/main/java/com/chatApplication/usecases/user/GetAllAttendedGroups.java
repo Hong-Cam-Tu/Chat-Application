@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.chatApplication.domains.Group;
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.Group;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
-public class GetAllAttendedGroups extends UseCase<GetAllAttendedGroups.InputValues,GetAllAttendedGroups.OutputValues> { 
+public class GetAllAttendedGroups extends UseCase<GetAllAttendedGroups.InputGetAllAttendedGroups,GetAllAttendedGroups.OutputGetAllAttendedGroups> { 
     private PrivateGroupStorage _privateGroupStorage;
     private PublicGroupStorage _publicGroupStorage;
 
@@ -21,26 +21,26 @@ public class GetAllAttendedGroups extends UseCase<GetAllAttendedGroups.InputValu
         _publicGroupStorage = publicGroupStorage;
     }
 
-    public static class InputValues {
+    public static class InputGetAllAttendedGroups {
         private String _idUser;
 
-        public InputValues(String idUser) {
+        public InputGetAllAttendedGroups(String idUser) {
             _idUser = idUser;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputGetAllAttendedGroups {
+        private final GetAllAttendedGroupsResult _result;
         private final String _message;
         private final List<Group> _groups;
 
-        public OutputValues(Result result, String message,List<Group> groups) {
+        public OutputGetAllAttendedGroups(GetAllAttendedGroupsResult result, String message,List<Group> groups) {
             _message = message;
             _result = result;
             _groups = groups;
         }
 
-        public Result getResult(){
+        public GetAllAttendedGroupsResult getResult(){
             return _result;
         }
 
@@ -53,12 +53,12 @@ public class GetAllAttendedGroups extends UseCase<GetAllAttendedGroups.InputValu
         }
     }
 
-    public static enum Result {
+    public static enum GetAllAttendedGroupsResult {
         Successed, Failed
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetAllAttendedGroups excute(InputGetAllAttendedGroups input) {
         List<PrivateGroup> privateGroup = _privateGroupStorage.getPrivateGroup().getAll(group-> group.isWithinGroup(input._idUser));
         List<PublicGroup> publicGroup = _publicGroupStorage.getPublicGroup().getAll(group->group.isWithinGroup(input._idUser));
 
@@ -66,9 +66,9 @@ public class GetAllAttendedGroups extends UseCase<GetAllAttendedGroups.InputValu
                             .flatMap(Collection::stream)
                             .collect(Collectors.toList());
         if(groups.size() == 0) {
-            return new OutputValues(Result.Failed, "There are no group attended", null);
+            return new OutputGetAllAttendedGroups(GetAllAttendedGroupsResult.Failed, "There are no group attended", null);
         } else {
-            return new OutputValues(Result.Successed, "Successed", groups);
+            return new OutputGetAllAttendedGroups(GetAllAttendedGroupsResult.Successed, "Successed", groups);
         }
     }
 

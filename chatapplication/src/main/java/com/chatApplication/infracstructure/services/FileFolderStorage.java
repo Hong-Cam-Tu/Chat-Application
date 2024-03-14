@@ -5,7 +5,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.FileOutputStream;
-import com.chatApplication.usecases.adapters.FileFolder;
+import com.chatapplication.usecases.adapters.FileFolder;
 
 public class FileFolderStorage implements FileFolder {
 

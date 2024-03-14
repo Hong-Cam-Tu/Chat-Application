@@ -2,46 +2,46 @@ package com.chatapplication.usecases.user;
 
 import java.util.List;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.messageimpl.GroupMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
 public class GetReadMessageOfOwnerGroup 
-        extends UseCase<GetReadMessageOfOwnerGroup.InputValues,GetReadMessageOfOwnerGroup.OutputValues> {
+        extends UseCase<GetReadMessageOfOwnerGroup.InputGetReadMessageOfOwnerGroup,GetReadMessageOfOwnerGroup.OutputGetReadMessageOfOwnerGroup> {
     private GroupConversationStorage _groupConversationStorage;
     
     public GetReadMessageOfOwnerGroup(GroupConversationStorage _groupConversationStorage) {
         this._groupConversationStorage = _groupConversationStorage;
     }
 
-    public class InputValues {
+    public class InputGetReadMessageOfOwnerGroup {
         private String _idGroupConversation;
         private String _idGroupMessage;
         
-        InputValues(String idGroupConverSation,String idGroupMessage) {
+        InputGetReadMessageOfOwnerGroup(String idGroupConverSation,String idGroupMessage) {
             _idGroupConversation =idGroupConverSation;
             _idGroupMessage = idGroupMessage;
         }
     }
 
-    public enum Result {
+    public enum GetReadMessageOfOwnerGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputGetReadMessageOfOwnerGroup {
+        private final GetReadMessageOfOwnerGroupResult _result;
         private final String _message;
         private final List<String> _idReadUsers;
 
-        OutputValues(Result result, String message,List<String> idReadUsers) {
+        OutputGetReadMessageOfOwnerGroup(GetReadMessageOfOwnerGroupResult result, String message,List<String> idReadUsers) {
             _result = result;
             _message = message;
             _idReadUsers = idReadUsers;
         }
 
-        public Result getResult(){
+        public GetReadMessageOfOwnerGroupResult getResult(){
             return _result;
         }
 
@@ -55,18 +55,18 @@ public class GetReadMessageOfOwnerGroup
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetReadMessageOfOwnerGroup excute(InputGetReadMessageOfOwnerGroup input) {
         GroupConversation conversation = _groupConversationStorage.getConversation().getById(input._idGroupConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "wrong id conversation",null);
+            return new OutputGetReadMessageOfOwnerGroup(GetReadMessageOfOwnerGroupResult.Failed, "wrong id conversation",null);
         } else {
             GroupMessage message = 
             conversation.getMessages().stream().filter(m->m.getID().equals(input._idGroupMessage)).findFirst().get();
             if(message == null) {
-                return new OutputValues(Result.Failed, "Wrong id Message",null);
+                return new OutputGetReadMessageOfOwnerGroup(GetReadMessageOfOwnerGroupResult.Failed, "Wrong id Message",null);
             } else {
                 List<String> idReadUsers = message.getUserRead();
-                return new OutputValues(Result.Successed, "Successed", idReadUsers);
+                return new OutputGetReadMessageOfOwnerGroup(GetReadMessageOfOwnerGroupResult.Successed, "Successed", idReadUsers);
             }
         }
     }

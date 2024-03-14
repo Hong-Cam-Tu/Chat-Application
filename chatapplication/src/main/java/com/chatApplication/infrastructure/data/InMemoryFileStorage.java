@@ -1,9 +1,9 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.FileBase;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.FileStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.FileBase;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.FileStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryFileStorage implements FileStorage {
     private Repository<FileBase> _files;

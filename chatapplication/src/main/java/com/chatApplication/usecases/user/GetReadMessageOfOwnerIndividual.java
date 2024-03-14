@@ -2,46 +2,47 @@ package com.chatapplication.usecases.user;
 
 import java.util.List;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
 public class GetReadMessageOfOwnerIndividual 
-        extends UseCase<GetReadMessageOfOwnerIndividual.InputValues,GetReadMessageOfOwnerIndividual.OutputValues> {
+        extends UseCase<GetReadMessageOfOwnerIndividual.InputGetReadMessageOfOwnerIndividual,
+        GetReadMessageOfOwnerIndividual.OutputGetReadMessageOfOwnerIndividual> {
     private IndividualConversationStorage _individualConversationStorage;
     
     public GetReadMessageOfOwnerIndividual(IndividualConversationStorage _individualConversationStorage) {
         this._individualConversationStorage = _individualConversationStorage;
     }
 
-    public class InputValues {
+    public class InputGetReadMessageOfOwnerIndividual {
         private String _idIndividualConversation;
         private String _idIndividualMessage;
         
-        InputValues(String idIndividualConverSation,String idIndividualMessage) {
+        InputGetReadMessageOfOwnerIndividual(String idIndividualConverSation,String idIndividualMessage) {
             _idIndividualConversation =idIndividualConverSation;
             _idIndividualMessage = idIndividualMessage;
         }
     }
 
-    public enum Result {
+    public enum GetReadMessageOfOwnerIndividualResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputGetReadMessageOfOwnerIndividual {
+        private final GetReadMessageOfOwnerIndividualResult _result;
         private final String _message;
         private final List<String> _idReadUsers;
 
-        OutputValues(Result result, String message,List<String> idReadUsers) {
+        OutputGetReadMessageOfOwnerIndividual(GetReadMessageOfOwnerIndividualResult result, String message,List<String> idReadUsers) {
             _result = result;
             _message = message;
             _idReadUsers = idReadUsers;
         }
 
-        public Result getResult(){
+        public GetReadMessageOfOwnerIndividualResult getResult(){
             return _result;
         }
 
@@ -55,18 +56,18 @@ public class GetReadMessageOfOwnerIndividual
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetReadMessageOfOwnerIndividual excute(InputGetReadMessageOfOwnerIndividual input) {
         IndividualConversation conversation = _individualConversationStorage.getConversation().getById(input._idIndividualConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "wrong id conversation",null);
+            return new OutputGetReadMessageOfOwnerIndividual(GetReadMessageOfOwnerIndividualResult.Failed, "wrong id conversation",null);
         } else {
             IndividualMessage message = 
             conversation.getMessages().stream().filter(m->m.getID().equals(input._idIndividualMessage)).findFirst().get();
             if(message == null) {
-                return new OutputValues(Result.Failed, "Wrong id Message",null);
+                return new OutputGetReadMessageOfOwnerIndividual(GetReadMessageOfOwnerIndividualResult.Failed, "Wrong id Message",null);
             } else {
                 List<String> idReadUsers = message.getUserRead();
-                return new OutputValues(Result.Successed, "Successed", idReadUsers);
+                return new OutputGetReadMessageOfOwnerIndividual(GetReadMessageOfOwnerIndividualResult.Successed, "Successed", idReadUsers);
             }
         }
     }

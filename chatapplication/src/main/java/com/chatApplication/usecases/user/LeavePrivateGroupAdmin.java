@@ -1,36 +1,38 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
 
-public class LeavePrivateGroupAdmin extends UseCase<LeavePrivateGroupAdmin.InputValues,LeavePrivateGroupAdmin.OutputValues> {
+public class LeavePrivateGroupAdmin 
+extends UseCase<LeavePrivateGroupAdmin.InputLeavePrivateGroupAdmin,
+        LeavePrivateGroupAdmin.OutputLeavePrivateGroupAdmin> {
     private PrivateGroupStorage _privateGroupStorage;
 
     public LeavePrivateGroupAdmin(PrivateGroupStorage privateGroupStorage) {
         _privateGroupStorage = privateGroupStorage;
     }
 
-    public static class InputValues {
+    public static class InputLeavePrivateGroupAdmin {
         private String _idGroup;
         private String _idAdmin;
 
-        public InputValues(String idGroup, String idAdmin) {
+        public InputLeavePrivateGroupAdmin(String idGroup, String idAdmin) {
             _idGroup = idGroup;
             _idAdmin = idAdmin;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputLeavePrivateGroupAdmin {
+        private final LeavePrivateGroupAdminResult _result;
         private final String _message;
 
-        public OutputValues(Result result, String string) {
+        public OutputLeavePrivateGroupAdmin(LeavePrivateGroupAdminResult result, String string) {
             _message = string;
             _result = result;
         }
 
-        public Result getResult(){
+        public LeavePrivateGroupAdminResult getResult(){
             return _result;
         }
 
@@ -39,20 +41,20 @@ public class LeavePrivateGroupAdmin extends UseCase<LeavePrivateGroupAdmin.Input
         }
     }
 
-    public static enum Result {
+    public static enum LeavePrivateGroupAdminResult {
         Successed, Failed
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputLeavePrivateGroupAdmin excute(InputLeavePrivateGroupAdmin input) {
         PrivateGroup group = _privateGroupStorage.getPrivateGroup().getFirst(g-> g.getID().equals(input._idGroup));
         if(group == null) {
-            return new OutputValues(Result.Failed, "");
+            return new OutputLeavePrivateGroupAdmin(LeavePrivateGroupAdminResult.Failed, "");
         } else {
             if(group.leaveGroupAdmin(input._idAdmin)) {
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputLeavePrivateGroupAdmin(LeavePrivateGroupAdminResult.Successed, "Successed");
             } else {
-                return new OutputValues(Result.Failed, "Wrong id admin or group must have at least one Admin");
+                return new OutputLeavePrivateGroupAdmin(LeavePrivateGroupAdminResult.Failed, "Wrong id admin or group must have at least one Admin");
             }
             
         }

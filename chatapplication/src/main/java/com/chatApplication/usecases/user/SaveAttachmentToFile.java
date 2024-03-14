@@ -1,11 +1,11 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.FileBase;
-import com.chatApplication.infrastructure.data.InMemoryFileStorage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.FileFolder;
+import com.chatapplication.domains.FileBase;
+import com.chatapplication.infrastructure.data.InMemoryFileStorage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.FileFolder;
 
-public class SaveAttachmentToFile extends UseCase<SaveAttachmentToFile.InputValues,SaveAttachmentToFile.OutputValues> {
+public class SaveAttachmentToFile extends UseCase<SaveAttachmentToFile.InputSaveAttachmentToFile,SaveAttachmentToFile.OutputSaveAttachmentToFile> {
     private InMemoryFileStorage _fileStorage;
     private FileFolder _fileFolder;
 
@@ -14,28 +14,28 @@ public class SaveAttachmentToFile extends UseCase<SaveAttachmentToFile.InputValu
         _fileFolder = fileFolder;
     }
 
-    public class InputValues {
+    public class InputSaveAttachmentToFile {
         private String _idFile;
-        InputValues(String idFile) {
+        InputSaveAttachmentToFile(String idFile) {
             _idFile =idFile;
         }
     }
 
-    public enum Result {
+    public enum SaveAttachmentToFileResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputSaveAttachmentToFile {
+        private final SaveAttachmentToFileResult _result;
         private final String _message;
 
-        OutputValues(Result result, String message) {
+        OutputSaveAttachmentToFile(SaveAttachmentToFileResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public Result getResult(){
+        public SaveAttachmentToFileResult getResult(){
             return _result;
         }
 
@@ -45,13 +45,13 @@ public class SaveAttachmentToFile extends UseCase<SaveAttachmentToFile.InputValu
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputSaveAttachmentToFile excute(InputSaveAttachmentToFile input) {
         FileBase file = _fileStorage.getFile().getFirst(f->f.getID().equals(input._idFile));
         if(file == null) {
-            return new OutputValues(Result.Failed, "wrong id");
+            return new OutputSaveAttachmentToFile(SaveAttachmentToFileResult.Failed, "wrong id");
         } else {
             _fileFolder.saveAttachment(file.getFileByte(), input._idFile);
-            return new OutputValues(Result.Successed, "success");
+            return new OutputSaveAttachmentToFile(SaveAttachmentToFileResult.Successed, "success");
         }
     }
 }

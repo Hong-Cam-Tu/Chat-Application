@@ -1,6 +1,6 @@
 package com.chatapplication.domains.files;
 
-import com.chatApplication.domains.FileBase;
+import com.chatapplication.domains.FileBase;
 
 public class Video extends FileBase {    
     private String _resolution;

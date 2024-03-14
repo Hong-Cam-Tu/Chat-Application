@@ -1,58 +1,67 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.domains.User;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
 
-public class CreatePrivateGroup extends UseCase<CreatePrivateGroup.InputValues,CreatePrivateGroup.OutputValues> {
+public class CreatePrivateGroup 
+    extends UseCase<CreatePrivateGroup.InputCreatePrivateGroup,
+            CreatePrivateGroup.OutputCreatePrivateGroup> {
     private PrivateGroupStorage _privateGroupStorage;
 
     public CreatePrivateGroup(PrivateGroupStorage privateGroupStorage) {
         _privateGroupStorage=privateGroupStorage;
     }
-    public class InputValues {
+
+    public static class InputCreatePrivateGroup {
         private String _nameGroup;
         private User _admin;
         
-        InputValues(String nameGroup,User admin) {
+        public InputCreatePrivateGroup(String nameGroup,User admin) {
             _nameGroup =nameGroup;
             _admin = admin;
         }
     }
 
-    public enum Result {
+    public static enum CreatePrivateGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputCreatePrivateGroup {
+        private final CreatePrivateGroupResult _result;
         private final String _message;
+        private final String _idGroup;
 
-        OutputValues(Result result, String message) {
+        public OutputCreatePrivateGroup(CreatePrivateGroupResult result, String message,String idGroup) {
             _result = result;
             _message = message;
+            _idGroup = idGroup;
         }
 
-        public Result getResult(){
+        public CreatePrivateGroupResult getResult(){
             return _result;
         }
 
         public String getMessage(){
             return _message;
         }
+
+        public String getIdGroup() {
+            return _idGroup;
+        }
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputCreatePrivateGroup excute(InputCreatePrivateGroup input) {
         PrivateGroup privateGroup = _privateGroupStorage.getPrivateGroup().getFirst(group -> group.getNameGroup().equals(input._nameGroup));
         if(privateGroup==null) {
             PrivateGroup group = new PrivateGroup(input._nameGroup,input._admin);
             _privateGroupStorage.getPrivateGroup().add(group);
-            return new OutputValues(Result.Successed, "Successed");
+            return new OutputCreatePrivateGroup(CreatePrivateGroupResult.Successed, "Successed",group.getID());
         } 
-            return new OutputValues(Result.Failed, "Group has already exist");
+            return new OutputCreatePrivateGroup(CreatePrivateGroupResult.Failed, "Group has already exist",null);
     }
 
 }

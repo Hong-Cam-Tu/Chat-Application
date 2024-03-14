@@ -1,9 +1,9 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryGroupConversationStorage implements GroupConversationStorage {
     private Repository<GroupConversation> _conversation;

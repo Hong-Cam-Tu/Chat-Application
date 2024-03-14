@@ -1,46 +1,47 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
 import java.util.List;
-import com.chatApplication.domains.messageimpl.GroupMessage;
+
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
 public class FindMessagesContainKeywordsGroup 
-        extends UseCase<FindMessagesContainKeywordsGroup.InputValues,FindMessagesContainKeywordsGroup.OutputValues> {
+        extends UseCase<FindMessagesContainKeywordsGroup.InputFindMessageGroup,FindMessagesContainKeywordsGroup.OutputFindMessageGroup> {
     private GroupConversationStorage _groupConversationStorage;
 
     public FindMessagesContainKeywordsGroup(GroupConversationStorage groupConversationStorage) {
         _groupConversationStorage = groupConversationStorage;
     }
 
-    public class InputValues {
+    public static class InputFindMessageGroup {
         private String _idConversation;
         private String _keyWords;
 
-        InputValues(String idConversation, String keywords) {
+        public InputFindMessageGroup(String idConversation, String keywords) {
             _idConversation = idConversation;
             _keyWords = keywords;
         }
     }
 
-    public enum Result {
+    public static enum FindMessageGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputFindMessageGroup {
+        private final FindMessageGroupResult _result;
         private final String _message;
         private final List<GroupMessage> _messages;
 
-        OutputValues(Result result, String message,List<GroupMessage> messages) {
+        public OutputFindMessageGroup(FindMessageGroupResult result, String message,List<GroupMessage> messages) {
             _result = result;
             _message = message;
             _messages = messages;
         }
 
-        public Result getResult(){
+        public FindMessageGroupResult getResult(){
             return _result;
         }
 
@@ -54,18 +55,18 @@ public class FindMessagesContainKeywordsGroup
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputFindMessageGroup excute(InputFindMessageGroup input) {
         GroupConversation conversation = 
         _groupConversationStorage.getConversation().getFirst(c->c.getID().equals(input._idConversation));
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id",null);
+            return new OutputFindMessageGroup(FindMessageGroupResult.Failed, "Wrong id",null);
         } else {
             List<GroupMessage> messages = 
             conversation.getMessages().stream().filter(m->m.getLastestContent().contains(input._keyWords)).toList();
             if(messages.size() == 0) {
-                return new OutputValues(Result.Failed, "None fit keywords", messages);
+                return new OutputFindMessageGroup(FindMessageGroupResult.Failed, "None fit keywords", messages);
             }
-            return new OutputValues(Result.Successed, "Successed", messages);
+            return new OutputFindMessageGroup(FindMessageGroupResult.Successed, "Successed", messages);
         }
     }
 }

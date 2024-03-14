@@ -1,6 +1,6 @@
 package com.chatapplication.usecases.adapters;
 
-import com.chatApplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
 
 public interface PrivateGroupStorage {
         Repository<PrivateGroup> getPrivateGroup();

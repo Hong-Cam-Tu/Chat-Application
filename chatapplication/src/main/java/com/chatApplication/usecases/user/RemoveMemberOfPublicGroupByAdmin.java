@@ -1,39 +1,40 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
 public class RemoveMemberOfPublicGroupByAdmin 
-        extends UseCase<RemoveMemberOfPublicGroupByAdmin.InputValues,RemoveMemberOfPublicGroupByAdmin.OutputValues> {
+        extends UseCase<RemoveMemberOfPublicGroupByAdmin.InputRemoveMemberOfPublicGroupByAdmin
+        ,RemoveMemberOfPublicGroupByAdmin.OutputRemoveMemberOfPublicGroupByAdmin> {
     private PublicGroupStorage _publicGroupStorage;
 
     public RemoveMemberOfPublicGroupByAdmin(PublicGroupStorage publicGroupStorage) {
         _publicGroupStorage = publicGroupStorage;
     }
 
-    public static class InputValues {
+    public static class InputRemoveMemberOfPublicGroupByAdmin {
         private String _idGroup;
         private String _idUser;
         private String _idAdmin;
 
-        public InputValues(String idGroup, String idUser,String idAdmin) {
+        public InputRemoveMemberOfPublicGroupByAdmin(String idGroup, String idUser,String idAdmin) {
             _idGroup = idGroup;
             _idUser = idUser;
             _idAdmin = idAdmin;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputRemoveMemberOfPublicGroupByAdmin {
+        private final RemoveMemberOfPublicGroupByAdminResult _result;
         private final String _message;
 
-        public OutputValues(Result result, String string) {
+        public OutputRemoveMemberOfPublicGroupByAdmin(RemoveMemberOfPublicGroupByAdminResult result, String string) {
             _message = string;
             _result = result;
         }
 
-        public Result getResult(){
+        public RemoveMemberOfPublicGroupByAdminResult getResult(){
             return _result;
         }
 
@@ -42,20 +43,20 @@ public class RemoveMemberOfPublicGroupByAdmin
         }
     }
 
-    public static enum Result {
+    public static enum RemoveMemberOfPublicGroupByAdminResult {
         Successed, Failed
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputRemoveMemberOfPublicGroupByAdmin excute(InputRemoveMemberOfPublicGroupByAdmin input) {
         PublicGroup group = _publicGroupStorage.getPublicGroup().getFirst(g-> g.getID().equals(input._idGroup));
         if(group == null) {
-            return new OutputValues(Result.Failed, "");
+            return new OutputRemoveMemberOfPublicGroupByAdmin(RemoveMemberOfPublicGroupByAdminResult.Failed, "");
         } else {
             if(group.removeMemberByAdmin(input._idUser, input._idAdmin)){
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputRemoveMemberOfPublicGroupByAdmin(RemoveMemberOfPublicGroupByAdminResult.Successed, "Successed");
             }else {
-                return new OutputValues(Result.Failed, "Wrong id member");
+                return new OutputRemoveMemberOfPublicGroupByAdmin(RemoveMemberOfPublicGroupByAdminResult.Failed, "Wrong id member");
             }
             
         }

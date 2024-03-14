@@ -3,17 +3,16 @@ package com.chatapplication.domains;
 
 import java.util.List;
 
+import com.chatapplication.infrastructure.data.InMemoryGroupConversationStorage;
+
 public abstract class Group extends BaseEntity {
-    private String _idConversation;
+    private final String _idConversation;
     private List<String> _idFiles;
     private String _nameGroup; 
+    InMemoryGroupConversationStorage inMemoryGroupConversationStorage;
 
     public String getIdConversation() {
         return _idConversation;
-    }
-
-    public void setIdConversation(String _idConversation) {
-        this._idConversation = _idConversation;
     }
 
     public String getNameGroup() {
@@ -35,6 +34,10 @@ public abstract class Group extends BaseEntity {
     public Group(String nameGroup) {
         super();
         _nameGroup = nameGroup;
+        GroupConversation groupConversation = new GroupConversation();
+        inMemoryGroupConversationStorage = inMemoryGroupConversationStorage.getInstance();
+        inMemoryGroupConversationStorage.getConversation().add(groupConversation);
+        _idConversation = groupConversation.getID();
     }
 
     public abstract List<User> getUsersByName(String name);
@@ -51,5 +54,5 @@ public abstract class Group extends BaseEntity {
 
     public abstract boolean removeMemberByAdmin(String idMember,String idAdmin);
 
-    public abstract boolean approveJoinReqeust(String idRequest,String idAdmin,boolean isApproval);
+    public abstract boolean approveJoinRequest(String idRequest,String idAdmin,boolean isApproval);
 }

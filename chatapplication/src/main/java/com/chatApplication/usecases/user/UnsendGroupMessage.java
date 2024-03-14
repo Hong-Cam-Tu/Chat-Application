@@ -1,42 +1,42 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.messageimpl.GroupMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
-public class UnsendGroupMessage extends UseCase<UnsendGroupMessage.InputValues,UnsendGroupMessage.OutputValues> {
+public class UnsendGroupMessage extends UseCase<UnsendGroupMessage.InputUnsendGroupMessage,UnsendGroupMessage.OutputUnsendGroupMessage> {
     private GroupConversationStorage _groupConversationStorage;
 
     public UnsendGroupMessage(GroupConversationStorage groupConversationStorage) {
         _groupConversationStorage = groupConversationStorage;
     }
 
-    public class InputValues {
+    public class InputUnsendGroupMessage {
         private String _idGroupConversation;
         private String _idGroupMessage;
         
-        InputValues(String idGroupConverSation,String idGroupMessage) {
+        InputUnsendGroupMessage(String idGroupConverSation,String idGroupMessage) {
             _idGroupConversation =idGroupConverSation;
             _idGroupMessage = idGroupMessage;
         }
     }
 
-    public enum Result {
+    public enum UnsendGroupMessageResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputUnsendGroupMessage {
+        private final UnsendGroupMessageResult _result;
         private final String _message;
 
-        OutputValues(Result result, String message) {
+        OutputUnsendGroupMessage(UnsendGroupMessageResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public Result getResult(){
+        public UnsendGroupMessageResult getResult(){
             return _result;
         }
 
@@ -46,16 +46,16 @@ public class UnsendGroupMessage extends UseCase<UnsendGroupMessage.InputValues,U
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputUnsendGroupMessage excute(InputUnsendGroupMessage input) {
         GroupConversation conversation = _groupConversationStorage.getConversation().getById(input._idGroupConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id conversation");
+            return new OutputUnsendGroupMessage(UnsendGroupMessageResult.Failed, "Wrong id conversation");
         } else {
             GroupMessage message = conversation.findMessageById(input._idGroupMessage);
             if(conversation.removeMessage(message)) {
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputUnsendGroupMessage(UnsendGroupMessageResult.Successed, "Successed");
             }else{
-                return new OutputValues(Result.Failed, "Wrong id Message");
+                return new OutputUnsendGroupMessage(UnsendGroupMessageResult.Failed, "Wrong id Message");
             }
         }
     }

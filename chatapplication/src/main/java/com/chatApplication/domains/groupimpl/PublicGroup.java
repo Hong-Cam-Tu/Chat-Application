@@ -3,8 +3,8 @@ package com.chatapplication.domains.groupimpl;
 
 import java.util.UUID;
 
-import com.chatApplication.domains.Group;
-import com.chatApplication.domains.User;
+import com.chatapplication.domains.Group;
+import com.chatapplication.domains.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,12 @@ public class PublicGroup extends Group {
       return _members;
    }
 
-   public PublicGroup(String name) {
+   public PublicGroup(String name,User userCreator) {
       super(name);
       _joinCode =  UUID.randomUUID().toString();
       _members = new ArrayList<>();
       _joinRequest = new ArrayList<>();
+      _members.add(userCreator);
    }
 
    public void addJoinRequest(User userRequest) {
@@ -36,7 +37,7 @@ public class PublicGroup extends Group {
    public List<User> getJoinRequest() {
       return _joinRequest;
    }
-
+   //get user by name
    @Override
    public List<User> getUsersByName(String name) {
          List<User> getUsers = new ArrayList<>();
@@ -47,15 +48,11 @@ public class PublicGroup extends Group {
          }
          return getUsers;
    }
-
+   // add member
    public void addMember(User member) {
       _members.add(member);
    }
-
-   public enum Status {
-         Successed,Failed;
-   }
-
+   //check whether within group
    @Override
    public boolean isWithinGroup(String id) {
       for(User member : getAllMembers()) {
@@ -65,31 +62,31 @@ public class PublicGroup extends Group {
       }
       return false;
    }
-
+   //invite member
    @Override
    public void inviteMember(String idAdmin, String idMember) {
       if(isWithinGroup(idAdmin)) {
          _members.add(findMemberById(idMember));
       }
    }
-
+   //remove member
    @Override
    public void removeMember(String idAdmin, String idMember) {
       if(isWithinGroup(idAdmin)) {
          _members.remove(findMemberById(idMember));
       }
    }
-
+   //find member by id
    @Override
    public User findMemberById(String idMember) {
       for(User member : _members) {
-         if(idMember.equals(member.getId())) {
+         if(idMember.equals(member.getID())) {
             return member;
          }
       }
       return null;
    }
-
+   //leave group of member
    @Override
    public boolean leaveGroupMember(String idMember) {
       User user = findMemberById(idMember);
@@ -99,15 +96,16 @@ public class PublicGroup extends Group {
       _members.remove(user);
       return true;
    }
-
+   //remove memver by admin
    @Override
    public boolean removeMemberByAdmin(String idMember, String idAdmin) {
       if(isWithinGroup(idAdmin) && isWithinGroup(idMember)) {
          leaveGroupMember(idMember);
+         return true;
       }
       return false;
    }
-
+   //get user from list join request
    public User findJoinRequestById(String idRequest) {
       for(User request : _joinRequest) {
          if(idRequest.equals(request.getID())) {
@@ -116,9 +114,9 @@ public class PublicGroup extends Group {
       }
       return null;
    }   
-
+   // accept join request
    @Override
-   public boolean approveJoinReqeust(String idRequest, String idAdmin, boolean isApproval) {
+   public boolean approveJoinRequest(String idRequest, String idAdmin, boolean isApproval) {
          User requestUser = findJoinRequestById(idRequest);
          if(requestUser == null || !isWithinGroup(idAdmin)) {
             return false;

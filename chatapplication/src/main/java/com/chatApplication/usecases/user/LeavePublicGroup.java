@@ -1,36 +1,36 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
-public class LeavePublicGroup extends UseCase<LeavePublicGroup.InputValues,LeavePublicGroup.OutputValues> {
+public class LeavePublicGroup extends UseCase<LeavePublicGroup.InputLeavePublicGroup,LeavePublicGroup.OutputLeavePublicGroup> {
     private PublicGroupStorage _publicGroupStorage;
 
     public LeavePublicGroup(PublicGroupStorage publicGroupStorage) {
         _publicGroupStorage = publicGroupStorage;
     }
 
-    public static class InputValues {
+    public static class InputLeavePublicGroup {
         private String _idGroup;
         private String _idUser;
 
-        public InputValues(String idGroup, String idUser) {
+        public InputLeavePublicGroup(String idGroup, String idUser) {
             _idGroup = idGroup;
             _idUser = idUser;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputLeavePublicGroup {
+        private final LeavePublicGroupResult _result;
         private final String _message;
 
-        public OutputValues(Result result, String string) {
+        public OutputLeavePublicGroup(LeavePublicGroupResult result, String string) {
             _message = string;
             _result = result;
         }
 
-        public Result getResult(){
+        public LeavePublicGroupResult getResult(){
             return _result;
         }
 
@@ -39,20 +39,20 @@ public class LeavePublicGroup extends UseCase<LeavePublicGroup.InputValues,Leave
         }
     }
 
-    public static enum Result {
+    public static enum LeavePublicGroupResult {
         Successed, Failed
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputLeavePublicGroup excute(InputLeavePublicGroup input) {
         PublicGroup group = _publicGroupStorage.getPublicGroup().getFirst(g-> g.getID().equals(input._idGroup));
         if(group == null) {
-            return new OutputValues(Result.Failed, "");
+            return new OutputLeavePublicGroup(LeavePublicGroupResult.Failed, "");
         } else {
             if(group.leaveGroupMember(input._idUser)){
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputLeavePublicGroup(LeavePublicGroupResult.Successed, "Successed");
             }else {
-                return new OutputValues(Result.Failed, "Wrong id member");
+                return new OutputLeavePublicGroup(LeavePublicGroupResult.Failed, "Wrong id member");
             }
             
         }

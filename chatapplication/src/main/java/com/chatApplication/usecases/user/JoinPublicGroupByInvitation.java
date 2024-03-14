@@ -1,11 +1,11 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.User;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
-public class JoinPublicGroupByInvitation extends UseCase<JoinPublicGroupByInvitation.InputValues,JoinPublicGroupByInvitation.OutputValues>{
+public class JoinPublicGroupByInvitation extends UseCase<JoinPublicGroupByInvitation.InputJoinPublicGroupByInvitation,JoinPublicGroupByInvitation.OutputJoinPublicGroupByInvitation>{
     private PublicGroupStorage _publicGroupStorage;
 
     public JoinPublicGroupByInvitation(PublicGroupStorage publicGroupStorage) {
@@ -13,33 +13,33 @@ public class JoinPublicGroupByInvitation extends UseCase<JoinPublicGroupByInvita
     }
 
 
-    public class InputValues {
+    public static class InputJoinPublicGroupByInvitation {
         private User _user;
         private String _idGroup;
         private String _idMember;
         
-        InputValues(User user, String idGroup,String idMember) {
+        public InputJoinPublicGroupByInvitation(User user, String idGroup,String idMember) {
             _user= user;
             _idGroup = idGroup;
             _idMember = idMember;
         }
     }
 
-    public enum JoinResult {
+    public static enum JoinPublicGroupByInvitationResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final JoinResult _result;
+    public static class OutputJoinPublicGroupByInvitation {
+        private final JoinPublicGroupByInvitationResult _result;
         private final String _message;
 
-        OutputValues(JoinResult result, String message) {
+        public OutputJoinPublicGroupByInvitation(JoinPublicGroupByInvitationResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public JoinResult getResult(){
+        public JoinPublicGroupByInvitationResult getResult(){
             return _result;
         }
 
@@ -49,17 +49,17 @@ public class JoinPublicGroupByInvitation extends UseCase<JoinPublicGroupByInvita
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputJoinPublicGroupByInvitation excute(InputJoinPublicGroupByInvitation input) {
         PublicGroup publicGroup = _publicGroupStorage.getPublicGroup().getFirst(g -> g.getID().equals(input._idGroup));
 
         if(publicGroup==null) {
-            return new OutputValues(JoinResult.Failed, "Wrong id public group.");
+            return new OutputJoinPublicGroupByInvitation(JoinPublicGroupByInvitationResult.Failed, "Wrong id public group.");
         }else {
             if( publicGroup.isWithinGroup(input._idMember)) {
                 publicGroup.addMember(input._user);
-                return new OutputValues(JoinResult.Successed, "Successed");
+                return new OutputJoinPublicGroupByInvitation(JoinPublicGroupByInvitationResult.Successed, "Successed");
             } else {
-                return new OutputValues(JoinResult.Failed, "Wrong id member");
+                return new OutputJoinPublicGroupByInvitation(JoinPublicGroupByInvitationResult.Failed, "Wrong id member");
             }
         }
     }

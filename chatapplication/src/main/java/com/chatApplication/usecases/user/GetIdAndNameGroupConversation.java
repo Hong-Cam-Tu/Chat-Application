@@ -1,15 +1,16 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
 public class GetIdAndNameGroupConversation 
-        extends UseCase<GetIdAndNameGroupConversation.InputValues,GetIdAndNameGroupConversation.OutputValues> {
+        extends UseCase<GetIdAndNameGroupConversation.InputGetIdAndNameGroupConversation,
+        GetIdAndNameGroupConversation.OutputGetIdAndNameGroupConversation> {
     private GroupConversationStorage _groupConversationStorage;
     private PublicGroupStorage _publicGroupStorage;
     private PrivateGroupStorage _privateGroupStorage;
@@ -21,26 +22,26 @@ public class GetIdAndNameGroupConversation
         _privateGroupStorage = privateGroupStorage;
     }
 
-    public class InputValues {
+    public class InputGetIdAndNameGroupConversation {
         private String _idConversation;
 
-        InputValues(String idConversation) {
+        InputGetIdAndNameGroupConversation(String idConversation) {
             _idConversation = idConversation;
         }
     }
 
-    public enum Result {
+    public enum GetIdAndNameGroupConversationResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputGetIdAndNameGroupConversation {
+        private final GetIdAndNameGroupConversationResult _result;
         private final String _message;
         private final String _idReceiver;
         private final String _nameReceiver;
 
-        OutputValues(Result result, String message,String idReceiver,String nameReceiver) {
+        OutputGetIdAndNameGroupConversation(GetIdAndNameGroupConversationResult result, String message,String idReceiver,String nameReceiver) {
             _result = result;
             _message = message;
             _idReceiver = idReceiver;
@@ -55,7 +56,7 @@ public class GetIdAndNameGroupConversation
             return _nameReceiver;
         }
 
-        public Result getResult(){
+        public GetIdAndNameGroupConversationResult getResult(){
             return _result;
         }
 
@@ -65,18 +66,18 @@ public class GetIdAndNameGroupConversation
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetIdAndNameGroupConversation excute(InputGetIdAndNameGroupConversation input) {
         GroupConversation conversation = _groupConversationStorage.getConversation().getById(input._idConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id conversation", null, null);
+            return new OutputGetIdAndNameGroupConversation(GetIdAndNameGroupConversationResult.Failed, "Wrong id conversation", null, null);
         } else {
             String idGroup =conversation.getMessages().get(0).getIdGroup();
             PublicGroup publicGroup = _publicGroupStorage.getPublicGroup().getById(idGroup);
             PrivateGroup privateGroup = _privateGroupStorage.getPrivateGroup().getById(idGroup);
             if(publicGroup != null) {
-                return new OutputValues(Result.Successed, "Successed", idGroup, publicGroup.getNameGroup());
+                return new OutputGetIdAndNameGroupConversation(GetIdAndNameGroupConversationResult.Successed, "Successed", idGroup, publicGroup.getNameGroup());
             }
-            return new OutputValues(Result.Successed, "Successed", idGroup, privateGroup.getNameGroup());
+            return new OutputGetIdAndNameGroupConversation(GetIdAndNameGroupConversationResult.Successed, "Successed", idGroup, privateGroup.getNameGroup());
         }
     }
 }

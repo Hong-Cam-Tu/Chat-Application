@@ -1,44 +1,46 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
 import java.util.List;
 
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
+
 public class GetAllIndividualConversations 
-        extends UseCase<GetAllIndividualConversations.InputValues,GetAllIndividualConversations.OutputValues> {
+        extends UseCase<GetAllIndividualConversations.InputGetAllIndividualConversations,
+        GetAllIndividualConversations.OutputGetAllIndividualConversations> {
     private IndividualConversationStorage _individualConversationStorage;
 
     public GetAllIndividualConversations(IndividualConversationStorage individualConversationStorage) {
         _individualConversationStorage = individualConversationStorage;
     }
 
-    public class InputValues {
+    public static class InputGetAllIndividualConversations {
         private String _idUser;
         
-        InputValues(String idUser) {
+        public InputGetAllIndividualConversations(String idUser) {
             _idUser = idUser;
         }
     }
 
-    public enum Result {
+    public static enum GetAllIndividualConversationsResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputGetAllIndividualConversations {
+        private final GetAllIndividualConversationsResult _result;
         private final String _message;
         private final List<IndividualConversation> _conversations;
 
-        OutputValues(Result result, String message,List<IndividualConversation> conversations) {
+        public OutputGetAllIndividualConversations(GetAllIndividualConversationsResult result, String message,List<IndividualConversation> conversations) {
             _result = result;
             _message = message;
             _conversations = conversations;
         }
 
-        public Result getResult(){
+        public GetAllIndividualConversationsResult getResult(){
             return _result;
         }
 
@@ -52,7 +54,7 @@ public class GetAllIndividualConversations
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetAllIndividualConversations excute(InputGetAllIndividualConversations input) {
         List<IndividualConversation> conversations = _individualConversationStorage.getConversation().getAll(c->{
             List<IndividualMessage> messages = c.getMessages();
             for(IndividualMessage message : messages) {
@@ -62,9 +64,9 @@ public class GetAllIndividualConversations
             return false;
         });
         if(conversations == null) {
-            return new OutputValues(Result.Failed, "failed", null);
+            return new OutputGetAllIndividualConversations(GetAllIndividualConversationsResult.Failed, "failed", null);
         } else {
-            return new OutputValues(Result.Successed, "Successed", conversations);
+            return new OutputGetAllIndividualConversations(GetAllIndividualConversationsResult.Successed, "Successed", conversations);
         }
     }
 }

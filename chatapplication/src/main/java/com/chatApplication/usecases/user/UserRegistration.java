@@ -7,7 +7,7 @@ import com.chatapplication.usecases.adapters.DataStorage;
 import com.chatapplication.usecases.adapters.Hasher;
 
 public class UserRegistration
-        extends UseCase<UserRegistration.InputValues, UserRegistration.OutputValues> {
+        extends UseCase<UserRegistration.InputRegistration, UserRegistration.OutputRegistration> {
     private DataStorage _dataStorage;
     private Hasher _hasher;
 
@@ -16,26 +16,26 @@ public class UserRegistration
         _hasher = hasher;
     }
 
-    public static class InputValues {
+    public static class InputRegistration {
         private String _username;
         private String _password;
 
-        public InputValues(String username, String password) {
+        public InputRegistration(String username, String password) {
             _username = username;
             _password = password;
         }
     }
 
-    public static class OutputValues {
-        private final RegisterResult _result;
+    public static class OutputRegistration {
+        private final RegistrationResult _result;
         private final String _message;
 
-        public OutputValues(RegisterResult result, String message) {
+        public OutputRegistration(RegistrationResult result, String message) {
             _message = message;
             _result = result;
         }
 
-        public RegisterResult getResult(){
+        public RegistrationResult getResult(){
             return _result;
         }
 
@@ -44,19 +44,19 @@ public class UserRegistration
         }
     }
 
-    public static enum RegisterResult {
+    public static enum RegistrationResult {
         Successed, Failed
     }
 
    @Override
-   public OutputValues excute(InputValues input) {
+   public OutputRegistration excute(InputRegistration input) {
       User userAvailable = _dataStorage.getUsers().getFirst(u -> u.getUsername().equals(input._username));
       if(userAvailable==null) {
          User user = new UserBuilder(input._username, _hasher.hash(input._password)).build();
         _dataStorage.getUsers().add(user);
-        return new OutputValues(RegisterResult.Successed, "");
+        return new OutputRegistration(RegistrationResult.Successed, "");
       }
-      return new OutputValues(RegisterResult.Failed, "Fail");
+      return new OutputRegistration(RegistrationResult.Failed, "Fail");
    }
 
 }

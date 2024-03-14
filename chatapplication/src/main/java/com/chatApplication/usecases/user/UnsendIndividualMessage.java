@@ -1,42 +1,43 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
-public class UnsendIndividualMessage extends UseCase<UnsendIndividualMessage.InputValues,UnsendIndividualMessage.OutputValues> {
+public class UnsendIndividualMessage extends UseCase<UnsendIndividualMessage.InputUnsendIndividualMessage
+,UnsendIndividualMessage.OutputUnsendIndividualMessage> {
     private IndividualConversationStorage _individualConversationStorage;
 
     public UnsendIndividualMessage(IndividualConversationStorage individualConversationStorage) {
         _individualConversationStorage = individualConversationStorage;
     }
 
-    public class InputValues {
+    public class InputUnsendIndividualMessage {
         private String _idIndividualConversation;
         private String _idIndividualMessage;
         
-        InputValues(String idIndividualConverSation,String idIndividualMessage) {
+        InputUnsendIndividualMessage(String idIndividualConverSation,String idIndividualMessage) {
             _idIndividualConversation =idIndividualConverSation;
             _idIndividualMessage = idIndividualMessage;
         }
     }
 
-    public enum Result {
+    public enum UnsendIndividualMessageResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputUnsendIndividualMessage {
+        private final UnsendIndividualMessageResult _result;
         private final String _message;
 
-        OutputValues(Result result, String message) {
+        OutputUnsendIndividualMessage(UnsendIndividualMessageResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public Result getResult(){
+        public UnsendIndividualMessageResult getResult(){
             return _result;
         }
 
@@ -46,16 +47,16 @@ public class UnsendIndividualMessage extends UseCase<UnsendIndividualMessage.Inp
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputUnsendIndividualMessage excute(InputUnsendIndividualMessage input) {
         IndividualConversation conversation = _individualConversationStorage.getConversation().getById(input._idIndividualConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id conversation");
+            return new OutputUnsendIndividualMessage(UnsendIndividualMessageResult.Failed, "Wrong id conversation");
         } else {
             IndividualMessage message = conversation.findMessageById(input._idIndividualMessage);
             if(conversation.removeMessage(message)) {
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputUnsendIndividualMessage(UnsendIndividualMessageResult.Successed, "Successed");
             }else{
-                return new OutputValues(Result.Failed, "Wrong id Message");
+                return new OutputUnsendIndividualMessage(UnsendIndividualMessageResult.Failed, "Wrong id Message");
             }
         }
     }

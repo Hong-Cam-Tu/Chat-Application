@@ -4,7 +4,7 @@ package com.chatapplication.usecases.adapters;
 
 import java.util.function.Predicate;
 
-import com.chatApplication.domains.BaseEntity;
+import com.chatapplication.domains.BaseEntity;
 
 import java.util.List;
 public interface Repository<T extends BaseEntity> {

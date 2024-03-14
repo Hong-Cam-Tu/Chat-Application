@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import com.chatApplication.domains.BaseEntity;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.BaseEntity;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
     private List<T> _enities;

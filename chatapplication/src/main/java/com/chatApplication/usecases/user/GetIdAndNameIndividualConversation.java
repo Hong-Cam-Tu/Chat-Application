@@ -1,13 +1,14 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.DataStorage;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.DataStorage;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
 public class GetIdAndNameIndividualConversation 
-        extends UseCase<GetIdAndNameIndividualConversation.InputValues,GetIdAndNameIndividualConversation.OutputValues>{
+        extends UseCase<GetIdAndNameIndividualConversation.InputGetIdAndNameIndividualConversation,
+        GetIdAndNameIndividualConversation.OutputGetIdAndNameIndividualConversation>{
     private DataStorage _dataStorage;
     private IndividualConversationStorage _individualConversationStorage;
 
@@ -16,28 +17,28 @@ public class GetIdAndNameIndividualConversation
         _individualConversationStorage = individualConversationStorage;
     }
 
-    public class InputValues {
+    public class InputGetIdAndNameIndividualConversation {
         private String _idConversation;
         private String _idUser;
 
-        InputValues(String idConversation,String idUser) {
+        InputGetIdAndNameIndividualConversation(String idConversation,String idUser) {
             _idConversation = idConversation;
             _idUser = idUser;
         }
     }
 
-    public enum Result {
+    public enum GetIdAndNameIndividualConversationResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputGetIdAndNameIndividualConversation {
+        private final GetIdAndNameIndividualConversationResult _result;
         private final String _message;
         private final String _idReceiver;
         private final String _nameReceiver;
 
-        OutputValues(Result result, String message,String idReceiver,String nameReceiver) {
+        OutputGetIdAndNameIndividualConversation(GetIdAndNameIndividualConversationResult result, String message,String idReceiver,String nameReceiver) {
             _result = result;
             _message = message;
             _idReceiver = idReceiver;
@@ -52,7 +53,7 @@ public class GetIdAndNameIndividualConversation
             return _nameReceiver;
         }
 
-        public Result getResult(){
+        public GetIdAndNameIndividualConversationResult getResult(){
             return _result;
         }
 
@@ -62,16 +63,16 @@ public class GetIdAndNameIndividualConversation
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetIdAndNameIndividualConversation excute(InputGetIdAndNameIndividualConversation input) {
         IndividualConversation conversation = _individualConversationStorage.getConversation().getById(input._idConversation);
         
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Fail", null, null);
+            return new OutputGetIdAndNameIndividualConversation(GetIdAndNameIndividualConversationResult.Failed, "Fail", null, null);
         } else {
             IndividualMessage message = conversation.getMessages().get(0);
             String idReceiver = message.getIdSender().equals(input._idUser) ? message.getIdReceiver() : message.getIdSender();
             String nameReceiver = _dataStorage.getUsers().getById(idReceiver).getFullName();
-            return new OutputValues(Result.Successed, "Successed", idReceiver, nameReceiver);
+            return new OutputGetIdAndNameIndividualConversation(GetIdAndNameIndividualConversationResult.Successed, "Successed", idReceiver, nameReceiver);
         }
     }
 

@@ -2,37 +2,39 @@ package com.chatapplication.usecases.user;
 
 import java.util.List;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.DataStorage;
+import com.chatapplication.domains.User;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.DataStorage;
 
-public class FindUsersByGivenName extends UseCase<FindUsersByGivenName.InputValues,FindUsersByGivenName.OutputValues> {
+public class FindUsersByGivenName 
+extends UseCase<FindUsersByGivenName.InputFindUsersByGivenName,
+FindUsersByGivenName.OutputFindUsersByGivenName> {
     private DataStorage _dataStorage;
 
     public FindUsersByGivenName(DataStorage dataStorage) {
         _dataStorage = dataStorage;
     }
 
-    public static class InputValues {
+    public static class InputFindUsersByGivenName {
         private String _name;
 
-        public InputValues(String name) {
+        public InputFindUsersByGivenName(String name) {
             _name = name;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputFindUsersByGivenName {
+        private final FindUsersByGivenNameResult _result;
         private final String _message;
         private final List<User> _users;
 
-        public OutputValues(Result result, String message,List<User> users) {
+        public OutputFindUsersByGivenName(FindUsersByGivenNameResult result, String message,List<User> users) {
             _message = message;
             _result = result;
             _users = users;
         }
 
-        public Result getResult(){
+        public FindUsersByGivenNameResult getResult(){
             return _result;
         }
 
@@ -45,17 +47,17 @@ public class FindUsersByGivenName extends UseCase<FindUsersByGivenName.InputValu
         }
     }
 
-    public static enum Result {
+    public static enum FindUsersByGivenNameResult {
         Successed, Failed
     }
 
    @Override
-   public OutputValues excute(InputValues input) {
+   public OutputFindUsersByGivenName excute(InputFindUsersByGivenName input) {
         List<User> users = _dataStorage.getUsers().getAll(user -> user.getFullName().contains(input._name));
         if(users.size()==0) {
-            return new OutputValues(Result.Failed, "There are no such User exist",users);
+            return new OutputFindUsersByGivenName(FindUsersByGivenNameResult.Failed, "There are no such User exist",users);
         } else {
-            return new OutputValues(Result.Successed, "Successed",users);
+            return new OutputFindUsersByGivenName(FindUsersByGivenNameResult.Successed, "Successed",users);
         }
    }
 }

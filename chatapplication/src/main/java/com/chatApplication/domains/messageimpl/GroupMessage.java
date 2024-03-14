@@ -1,12 +1,12 @@
-package com.chatApplication.domains.messageimpl;
+package com.chatapplication.domains.messageimpl;
 
-import com.chatApplication.domains.Message;
+import com.chatapplication.domains.Message;
 
 public class GroupMessage extends Message {
     private String _idGroup;
 
-    public GroupMessage(String idSender,String idGroup) {
-        super(idSender);
+    public GroupMessage(String idSender,String idGroup,String content) {
+        super(idSender,content);
         _idGroup = idGroup;
     }
     

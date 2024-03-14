@@ -1,44 +1,44 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.domains.User;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
 
-public class JoinPrivateGroup extends UseCase<JoinPrivateGroup.InputValues,JoinPrivateGroup.OutputValues>{
+public class JoinPrivateGroup extends UseCase<JoinPrivateGroup.InputJoinPrivateGroup,JoinPrivateGroup.OutputJoinPrivateGroup>{
     private PrivateGroupStorage _privateGroupStorage;
 
     public JoinPrivateGroup(PrivateGroupStorage privateGroupStorage) {
         _privateGroupStorage=  privateGroupStorage;
     }
 
-    public class InputValues {
+    public static class InputJoinPrivateGroup {
         private User _user;
         private String _idGroup;
         private String _idAdmin;
         
-        InputValues(User user, String idGroup,String idAdmin) {
+        public InputJoinPrivateGroup(User user, String idGroup,String idAdmin) {
             _user= user;
             _idGroup = idGroup;
             this._idAdmin = idAdmin;
         }
     }
 
-    public enum JoinResult {
+    public static enum JoinPrivateGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final JoinResult _result;
+    public static class OutputJoinPrivateGroup {
+        private final JoinPrivateGroupResult _result;
         private final String _message;
 
-        OutputValues(JoinResult result, String message) {
+        public OutputJoinPrivateGroup(JoinPrivateGroupResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public JoinResult getResult(){
+        public JoinPrivateGroupResult getResult(){
             return _result;
         }
 
@@ -48,17 +48,17 @@ public class JoinPrivateGroup extends UseCase<JoinPrivateGroup.InputValues,JoinP
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputJoinPrivateGroup excute(InputJoinPrivateGroup input) {
         PrivateGroup privateGroup = _privateGroupStorage.getPrivateGroup().getFirst(g -> g.getID().equals(input._idGroup));
 
         if(privateGroup==null) {
-            return new OutputValues(JoinResult.Failed, "Wrong id group.");
+            return new OutputJoinPrivateGroup(JoinPrivateGroupResult.Failed, "Wrong id group.");
         }else {
             if(privateGroup.isAdmin(input._idAdmin)) {
                 privateGroup.addMember(input._user);
-                return new OutputValues(JoinResult.Successed, "Successed");
+                return new OutputJoinPrivateGroup(JoinPrivateGroupResult.Successed, "Successed");
             } else {
-                return new OutputValues(JoinResult.Failed, "Wrong id admin");
+                return new OutputJoinPrivateGroup(JoinPrivateGroupResult.Failed, "Wrong id admin");
             }
         }
     }

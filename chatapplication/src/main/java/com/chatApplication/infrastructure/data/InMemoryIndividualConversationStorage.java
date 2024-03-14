@@ -1,9 +1,9 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryIndividualConversationStorage implements IndividualConversationStorage {
     private Repository<IndividualConversation> _conversation;

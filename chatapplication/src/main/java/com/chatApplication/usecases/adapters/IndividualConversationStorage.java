@@ -1,6 +1,6 @@
 package com.chatapplication.usecases.adapters;
 
-import com.chatApplication.domains.IndividualConversation;
+import com.chatapplication.domains.IndividualConversation;
 
 public interface IndividualConversationStorage {
     Repository<IndividualConversation> getConversation();

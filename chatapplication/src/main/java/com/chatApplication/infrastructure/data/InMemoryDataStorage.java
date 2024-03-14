@@ -1,9 +1,9 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.DataStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.User;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.DataStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryDataStorage implements DataStorage {
     private Repository<User> _users;

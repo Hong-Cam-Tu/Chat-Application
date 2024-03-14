@@ -1,46 +1,48 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
 import java.util.List;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
+
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
 public class DeleteNLatestMessagesIndividual 
-extends UseCase<DeleteNLatestMessagesIndividual.InputValues,DeleteNLatestMessagesIndividual.OutputValues> {
+extends UseCase<DeleteNLatestMessagesIndividual.InputDeleteMessage,
+DeleteNLatestMessagesIndividual.OutputDeleteMessage> {
     private IndividualConversationStorage _individualConversationStorage;
 
     public DeleteNLatestMessagesIndividual(IndividualConversationStorage individualConversationStorage) {
         this._individualConversationStorage = individualConversationStorage;
     }
 
-    public class InputValues {
+    public class InputDeleteMessage {
         private String _idIndividualConversation;
         private String _idUser;
         private int  _N;
 
-        public InputValues(String idIndividualConversation, String idUser, int N) {
+        public InputDeleteMessage(String idIndividualConversation, String idUser, int N) {
             this._idIndividualConversation = idIndividualConversation;
             this._idUser = idUser;
             this._N = N;
         }     
     }
 
-    public enum Result {
+    public enum DeleteMessageResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public class OutputDeleteMessage {
+        private final DeleteMessageResult _result;
         private final String _message;
 
-        OutputValues(Result result, String message) {
+        OutputDeleteMessage(DeleteMessageResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public Result getResult(){
+        public DeleteMessageResult getResult(){
             return _result;
         }
 
@@ -50,17 +52,17 @@ extends UseCase<DeleteNLatestMessagesIndividual.InputValues,DeleteNLatestMessage
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputDeleteMessage excute(InputDeleteMessage input) {
         IndividualConversation conversation = _individualConversationStorage.getConversation().getById(input._idIndividualConversation);
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id conversation");
+            return new OutputDeleteMessage(DeleteMessageResult.Failed, "Wrong id conversation");
         } else {
             List<IndividualMessage> messages = conversation.getMessages().stream().filter(m -> m.getIdSender().equals(input._idUser)).toList();
             if(messages.size() > input._N ) {
                 messages = messages.subList(messages.size()-input._N, messages.size());
             }
             conversation.removeAllMessages(messages);
-            return new OutputValues(Result.Successed, "Successed");
+            return new OutputDeleteMessage(DeleteMessageResult.Successed, "Successed");
         }
     }
 }

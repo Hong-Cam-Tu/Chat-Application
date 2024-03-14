@@ -1,9 +1,9 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryPrivateGroupStorage implements PrivateGroupStorage {
     private Repository<PrivateGroup> _privateGroups;

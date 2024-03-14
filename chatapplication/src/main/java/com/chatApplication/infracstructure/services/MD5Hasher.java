@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.chatApplication.usecases.adapters.Hasher;
+import com.chatapplication.usecases.adapters.Hasher;
 
 public class MD5Hasher implements Hasher {
    public MD5Hasher() {

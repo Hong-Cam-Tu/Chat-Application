@@ -1,14 +1,15 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.domains.messageimpl.GroupMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
 
 public class DeleteMessageGroupByOwner 
-        extends UseCase<DeleteMessageGroupByOwner.InputValues,DeleteMessageGroupByOwner.OutputValues> {
+        extends UseCase<DeleteMessageGroupByOwner.InputDeleteByOwner,
+        DeleteMessageGroupByOwner.OutputDeleteByOwner> {
     private GroupConversationStorage _groupConvesationStorage;
     private PublicGroupStorage _publicGroupStorage;
 
@@ -18,32 +19,32 @@ public class DeleteMessageGroupByOwner
         this._publicGroupStorage = publicGroupStorage;
     }
 
-    public class InputValues {
+    public static class InputDeleteByOwner {
         private String _idPublicGroup;
         private String _idMessage;
         private String _idSender;
-        public InputValues(String idPublicGroup, String idMessage, String idSender) {
+        public InputDeleteByOwner(String idPublicGroup, String idMessage, String idSender) {
             this._idPublicGroup = idPublicGroup;
             this._idMessage = idMessage;
             this._idSender = idSender;
         }         
     }
 
-    public enum Result {
+    public static enum DeleteByOwnerResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputDeleteByOwner {
+        private final DeleteByOwnerResult _result;
         private final String _message;
 
-        OutputValues(Result result, String message) {
+        public OutputDeleteByOwner(DeleteByOwnerResult result, String message) {
             _result = result;
             _message = message;
         }
 
-        public Result getResult(){
+        public DeleteByOwnerResult getResult(){
             return _result;
         }
 
@@ -53,23 +54,23 @@ public class DeleteMessageGroupByOwner
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputDeleteByOwner excute(InputDeleteByOwner input) {
         PublicGroup publicGroup = _publicGroupStorage.getPublicGroup().getById(input._idPublicGroup);
 
         if(publicGroup == null) {
-            return new OutputValues(Result.Failed, "Wrong id group");
+            return new OutputDeleteByOwner(DeleteByOwnerResult.Failed, "Wrong id group");
         }else {
             GroupConversation conversation = _groupConvesationStorage.getConversation().getById(publicGroup.getIdConversation());
             GroupMessage message = conversation.getMessages().stream().filter(m->m.getID().equals(input._idMessage)).findFirst().get();
 
             if(message == null) {
-                return new OutputValues(Result.Failed, "Wrong id Message");
+                return new OutputDeleteByOwner(DeleteByOwnerResult.Failed, "Wrong id Message");
             }else{
                 if(message.getIdSender().equals(input._idSender)) {
                     conversation.removeMessage(message);
-                    return new OutputValues(Result.Successed, "Successed");
+                    return new OutputDeleteByOwner(DeleteByOwnerResult.Successed, "Successed");
                 } else {
-                    return new OutputValues(Result.Failed, "Wrong id sender");
+                    return new OutputDeleteByOwner(DeleteByOwnerResult.Failed, "Wrong id sender");
                 }
             }
         }

@@ -1,12 +1,12 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.User;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.DataStorage;
-import com.chatApplication.usecases.adapters.Hasher;
+import com.chatapplication.domains.User;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.DataStorage;
+import com.chatapplication.usecases.adapters.Hasher;
 
 public class LoginUseCase
-        extends UseCase<LoginUseCase.InputValues, LoginUseCase.OutputValues> {
+        extends UseCase<LoginUseCase.InputLoginUseCase, LoginUseCase.OutputLoginUseCase> {
     private DataStorage _dataStorage;
     private Hasher _hasher;
 
@@ -15,22 +15,22 @@ public class LoginUseCase
         _hasher = hasher;
     }
 
-    public static class InputValues {
+    public static class InputLoginUseCase {
         private String _username;
         private String _password;
 
-        public InputValues(String username, String password) {
+        public InputLoginUseCase(String username, String password) {
             _username = username;
             _password = password;
         }
     }
 
-    public static class OutputValues {
+    public static class OutputLoginUseCase {
         private final LoginResult _result;
         private final String _message;
         private final User _user;
 
-        public OutputValues(LoginResult result, String message,User user) {
+        public OutputLoginUseCase(LoginResult result, String message,User user) {
             _message = message;
             _result = result;
             _user =user;
@@ -54,12 +54,12 @@ public class LoginUseCase
     }
 
    @Override
-   public OutputValues excute(InputValues input) {
+   public OutputLoginUseCase excute(InputLoginUseCase input) {
       User user = _dataStorage.getUsers()
       .getFirst(u->(u.getUsername().equals(input._username) && u.checkPassword(_hasher.hash(input._password))));
       if(user == null) {
-         return new OutputValues(LoginResult.Failed, "Fail", null);
+         return new OutputLoginUseCase(LoginResult.Failed, "Fail", null);
       }
-      return new OutputValues(LoginResult.Successed, "", user);
+      return new OutputLoginUseCase(LoginResult.Successed, "", user);
    }
 }

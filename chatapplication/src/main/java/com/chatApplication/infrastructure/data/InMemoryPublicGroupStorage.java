@@ -1,13 +1,13 @@
 package com.chatapplication.infrastructure.data;
 
-import com.chatApplication.domains.groupimpl.PublicGroup;
-import com.chatApplication.infrastructure.repositories.InMemoryRepository;
-import com.chatApplication.usecases.adapters.PublicGroupStorage;
-import com.chatApplication.usecases.adapters.Repository;
+import com.chatapplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.infrastructure.repositories.InMemoryRepository;
+import com.chatapplication.usecases.adapters.PublicGroupStorage;
+import com.chatapplication.usecases.adapters.Repository;
 
 public class InMemoryPublicGroupStorage implements PublicGroupStorage  {
     private Repository<PublicGroup> _publicGroups;
-    private static InMemoryPrivateGroupStorage _storage;
+    private static InMemoryPublicGroupStorage _storage;
 
     public InMemoryPublicGroupStorage() {
             _publicGroups = new InMemoryRepository<PublicGroup>();
@@ -17,9 +17,9 @@ public class InMemoryPublicGroupStorage implements PublicGroupStorage  {
         return _publicGroups;
     }
 
-    public static InMemoryPrivateGroupStorage getInstance() {
+    public static InMemoryPublicGroupStorage getInstance() {
         if (_storage == null) {
-            _storage = new InMemoryPrivateGroupStorage();
+            _storage = new InMemoryPublicGroupStorage();
         }
         return _storage;
     }

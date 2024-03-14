@@ -1,44 +1,45 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
 import java.util.List;
-import com.chatApplication.domains.messageimpl.GroupMessage;
+
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
 public class GetAllGroupConversations 
-        extends UseCase<GetAllGroupConversations.InputValues,GetAllGroupConversations.OutputValues> {
+        extends UseCase<GetAllGroupConversations.InputGetAllGroupConversations,GetAllGroupConversations.OutputGetAllGroupConversations> {
     private GroupConversationStorage _groupConversationStorage;
 
     public GetAllGroupConversations(GroupConversationStorage groupConversationStorage) {
         _groupConversationStorage = groupConversationStorage;
     }
 
-    public class InputValues {
+    public static class InputGetAllGroupConversations {
         private String _idUser;
 
-        InputValues(String idUser) {
+        public InputGetAllGroupConversations(String idUser) {
             _idUser = idUser;
         }
     }
 
-    public enum Result {
+    public static enum GetAllGroupConversationsResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputGetAllGroupConversations {
+        private final GetAllGroupConversationsResult _result;
         private final String _message;
         private final List<GroupConversation> _conversations;
 
-        OutputValues(Result result, String message,List<GroupConversation> conversations) {
+        OutputGetAllGroupConversations(GetAllGroupConversationsResult result, String message,List<GroupConversation> conversations) {
             _result = result;
             _message = message;
             _conversations = conversations;
         }
 
-        public Result getResult(){
+        public GetAllGroupConversationsResult getResult(){
             return _result;
         }
 
@@ -52,7 +53,7 @@ public class GetAllGroupConversations
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetAllGroupConversations excute(InputGetAllGroupConversations input) {
         List<GroupConversation> conversations = _groupConversationStorage.getConversation().getAll(c->{
             List<GroupMessage> messages = c.getMessages();
             for(GroupMessage message : messages) {
@@ -62,9 +63,9 @@ public class GetAllGroupConversations
             return false;
         });
         if(conversations == null) {
-            return new OutputValues(Result.Failed, "failed", null);
+            return new OutputGetAllGroupConversations(GetAllGroupConversationsResult.Failed, "failed", null);
         } else {
-            return new OutputValues(Result.Successed, "Successed", conversations);
+            return new OutputGetAllGroupConversations(GetAllGroupConversationsResult.Successed, "Successed", conversations);
         }
     }
 }

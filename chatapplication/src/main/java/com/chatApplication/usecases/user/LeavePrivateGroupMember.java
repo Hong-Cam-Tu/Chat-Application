@@ -1,36 +1,38 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.groupimpl.PrivateGroup;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.PrivateGroupStorage;
+import com.chatapplication.domains.groupimpl.PrivateGroup;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.PrivateGroupStorage;
 
-public class LeavePrivateGroupMember extends UseCase<LeavePrivateGroupMember.InputValues,LeavePrivateGroupMember.OutputValues> {
+public class LeavePrivateGroupMember 
+        extends UseCase<LeavePrivateGroupMember.InputLeavePrivateGroupMember,
+            LeavePrivateGroupMember.OutputLeavePrivateGroupMember> {
     private PrivateGroupStorage _privateGroupStorage;
 
     public LeavePrivateGroupMember(PrivateGroupStorage privateGroupStorage) {
         _privateGroupStorage = privateGroupStorage;
     }
 
-    public static class InputValues {
+    public static class InputLeavePrivateGroupMember {
         private String _idGroup;
         private String _idUser;
 
-        public InputValues(String idGroup, String idUser) {
+        public InputLeavePrivateGroupMember(String idGroup, String idUser) {
             _idGroup = idGroup;
             _idUser = idUser;
         }
     }
 
-    public static class OutputValues {
-        private final Result _result;
+    public static class OutputLeavePrivateGroupMember {
+        private final LeavePrivateGroupMemberResult _result;
         private final String _message;
 
-        public OutputValues(Result result, String string) {
+        public OutputLeavePrivateGroupMember(LeavePrivateGroupMemberResult result, String string) {
             _message = string;
             _result = result;
         }
 
-        public Result getResult(){
+        public LeavePrivateGroupMemberResult getResult(){
             return _result;
         }
 
@@ -39,20 +41,20 @@ public class LeavePrivateGroupMember extends UseCase<LeavePrivateGroupMember.Inp
         }
     }
 
-    public static enum Result {
+    public static enum LeavePrivateGroupMemberResult {
         Successed, Failed
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputLeavePrivateGroupMember excute(InputLeavePrivateGroupMember input) {
         PrivateGroup group = _privateGroupStorage.getPrivateGroup().getFirst(g-> g.getID().equals(input._idGroup));
         if(group == null) {
-            return new OutputValues(Result.Failed, "");
+            return new OutputLeavePrivateGroupMember(LeavePrivateGroupMemberResult.Failed, "");
         } else {
             if(group.leaveGroupMember(input._idUser)) {
-                return new OutputValues(Result.Successed, "Successed");
+                return new OutputLeavePrivateGroupMember(LeavePrivateGroupMemberResult.Successed, "Successed");
             } else {
-                return new OutputValues(Result.Failed, "Wrong id member");
+                return new OutputLeavePrivateGroupMember(LeavePrivateGroupMemberResult.Failed, "Wrong id member");
             }
             
         }

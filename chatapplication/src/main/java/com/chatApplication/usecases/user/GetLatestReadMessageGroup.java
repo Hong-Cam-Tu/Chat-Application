@@ -2,46 +2,46 @@ package com.chatapplication.usecases.user;
 
 import java.util.List;
 
-import com.chatApplication.domains.GroupConversation;
-import com.chatApplication.domains.messageimpl.GroupMessage;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.GroupConversationStorage;
+import com.chatapplication.domains.GroupConversation;
+import com.chatapplication.domains.messageimpl.GroupMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.GroupConversationStorage;
 
 public class GetLatestReadMessageGroup 
-        extends UseCase<GetLatestReadMessageGroup.InputValues,GetLatestReadMessageGroup.OutputValues> {
+        extends UseCase<GetLatestReadMessageGroup.InputGetLatestReadMessageGroup,GetLatestReadMessageGroup.OutputGetLatestReadMessageGroup> {
     private GroupConversationStorage _groupConversationStorage;
 
     public GetLatestReadMessageGroup(GroupConversationStorage groupConversationStorage) {
         _groupConversationStorage = groupConversationStorage;
     }
 
-    public class InputValues {
+    public static class InputGetLatestReadMessageGroup {
         private String _idGroupConversation;
         private String _idUser;
         
-        InputValues(String idGroupConverSation,String idUser) {
+        public InputGetLatestReadMessageGroup(String idGroupConverSation,String idUser) {
             _idGroupConversation =idGroupConverSation;
             _idUser = idUser;
         }
     }
 
-    public enum Result {
+    public static enum GetLatestReadMessageGroupResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputGetLatestReadMessageGroup {
+        private final GetLatestReadMessageGroupResult _result;
         private final String _message;
         private final GroupMessage _groupMessage;
 
-        OutputValues(Result result, String message,GroupMessage groupMessage) {
+        public OutputGetLatestReadMessageGroup(GetLatestReadMessageGroupResult result, String message,GroupMessage groupMessage) {
             _result = result;
             _message = message;
             _groupMessage = groupMessage;
         }
 
-        public Result getResult(){
+        public GetLatestReadMessageGroupResult getResult(){
             return _result;
         }
 
@@ -55,16 +55,16 @@ public class GetLatestReadMessageGroup
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputGetLatestReadMessageGroup excute(InputGetLatestReadMessageGroup input) {
         GroupConversation conversation = _groupConversationStorage.getConversation().getById(input._idGroupConversation);
         if(conversation==null) {
-            return new OutputValues(Result.Failed, "Wrong id conversation",null);
+            return new OutputGetLatestReadMessageGroup(GetLatestReadMessageGroupResult.Failed, "Wrong id conversation",null);
         } else {
             List<GroupMessage> messages= conversation.getMessages().stream().filter(m->m.isReadMessage(input._idUser)).toList();
             if(messages.size()==0) {
-                return new OutputValues( Result.Failed, null, null);
+                return new OutputGetLatestReadMessageGroup( GetLatestReadMessageGroupResult.Failed, null, null);
             } else {
-                return new OutputValues(Result.Successed, "Successed", messages.get(messages.size()-1));
+                return new OutputGetLatestReadMessageGroup(GetLatestReadMessageGroupResult.Successed, "Successed", messages.get(messages.size()-1));
             }
         }
     }

@@ -1,47 +1,48 @@
 package com.chatapplication.usecases.user;
 
-import com.chatApplication.domains.IndividualConversation;
-import com.chatApplication.usecases.UseCase;
-import com.chatApplication.usecases.adapters.IndividualConversationStorage;
 import java.util.List;
-import com.chatApplication.domains.messageimpl.IndividualMessage;
+
+import com.chatapplication.domains.IndividualConversation;
+import com.chatapplication.domains.messageimpl.IndividualMessage;
+import com.chatapplication.usecases.UseCase;
+import com.chatapplication.usecases.adapters.IndividualConversationStorage;
 
 public class FindMessagesContainKeywordsIndividual 
-        extends UseCase<FindMessagesContainKeywordsIndividual.InputValues,
-        FindMessagesContainKeywordsIndividual.OutputValues> {
+        extends UseCase<FindMessagesContainKeywordsIndividual.InputFindMessageIndividual,
+        FindMessagesContainKeywordsIndividual.OutputFindMessageIndividual> {
     private IndividualConversationStorage _individualConversationStorage;
 
     public FindMessagesContainKeywordsIndividual(IndividualConversationStorage individualConversationStorage) {
         _individualConversationStorage = individualConversationStorage;
     }
 
-    public class InputValues {
+    public static class InputFindMessageIndividual {
         private String _idConversation;
         private String _keyWords;
 
-        InputValues(String idConversation, String keywords) {
+        public InputFindMessageIndividual(String idConversation, String keywords) {
             _idConversation = idConversation;
             _keyWords = keywords;
         }
     }
 
-    public enum Result {
+    public static enum FindMessageIndividualResult {
         Successed,
         Failed;
      }
 
-    public class OutputValues {
-        private final Result _result;
+    public static class OutputFindMessageIndividual {
+        private final FindMessageIndividualResult _result;
         private final String _message;
         private final List<IndividualMessage> _messages;
 
-        OutputValues(Result result, String message,List<IndividualMessage> messages) {
+        public OutputFindMessageIndividual(FindMessageIndividualResult result, String message,List<IndividualMessage> messages) {
             _result = result;
             _message = message;
             _messages = messages;
         }
 
-        public Result getResult(){
+        public FindMessageIndividualResult getResult(){
             return _result;
         }
 
@@ -55,18 +56,18 @@ public class FindMessagesContainKeywordsIndividual
     }
 
     @Override
-    public OutputValues excute(InputValues input) {
+    public OutputFindMessageIndividual excute(InputFindMessageIndividual input) {
         IndividualConversation conversation =
          _individualConversationStorage.getConversation().getFirst(c->c.getID().equals(input._idConversation));
         if(conversation == null) {
-            return new OutputValues(Result.Failed, "Wrong id",null);
+            return new OutputFindMessageIndividual(FindMessageIndividualResult.Failed, "Wrong id",null);
         } else {
             List<IndividualMessage> messages = 
             conversation.getMessages().stream().filter(m->m.getLastestContent().contains(input._keyWords)).toList();
             if(messages.size() == 0) {
-                return new OutputValues(Result.Failed, "None fit keywords", messages);
+                return new OutputFindMessageIndividual(FindMessageIndividualResult.Failed, "None fit keywords", messages);
             }
-            return new OutputValues(Result.Successed, "Successed", messages);
+            return new OutputFindMessageIndividual(FindMessageIndividualResult.Successed, "Successed", messages);
         }
     }
 }

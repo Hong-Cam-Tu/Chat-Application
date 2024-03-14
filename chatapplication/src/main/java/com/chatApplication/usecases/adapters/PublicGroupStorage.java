@@ -1,6 +1,6 @@
 package com.chatapplication.usecases.adapters;
 
-import com.chatApplication.domains.groupimpl.PublicGroup;
+import com.chatapplication.domains.groupimpl.PublicGroup;
 
 public interface PublicGroupStorage {
     Repository<PublicGroup> getPublicGroup();
